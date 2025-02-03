@@ -69,7 +69,7 @@ class MyClientController extends Controller
         // dd($myClient);
         // $redis = Redis::connection();
         // $redis->delete($myClient->slug);
-        Redis::del('laravel_database_'.$myClient->slug);
+        Redis::del('laravel_database_'.Str::trim($myClient->slug));
         $myClient->delete();
 
         return response()->json([
