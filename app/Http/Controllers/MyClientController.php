@@ -62,4 +62,18 @@ class MyClientController extends Controller
             'slug' => $response,
         ]);
     }
+
+    public function destroy(MyClient $myClient)
+    {
+        //
+        // dd($myClient);
+        // $redis = Redis::connection();
+        // $redis->delete($myClient->slug);
+        Redis::del('laravel_database_'.$myClient->slug);
+        $myClient->delete();
+
+        return response()->json([
+            'message' => 'removed successfully',
+        ]);
+    }
 }
