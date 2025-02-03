@@ -20,7 +20,7 @@ class MyClientController extends Controller
 
     public function store(MyClientRequest $request)
     {
-        $slug = Str::slug($request->name);
+        $slug = Str::slug($request->slug);
         $array = [
             ...$request->validated(),
             'slug' => $slug,
@@ -30,8 +30,29 @@ class MyClientController extends Controller
 
         $redis = Redis::connection();
         $redis->set($slug, json_encode($myClient->toArray()));
+        $response = $redis->get($slug);
 
-        $redis    = Redis::connection();
+        $response = json_decode($response);
+
+        return response()->json([
+            'data' => $myClient,
+            'slug' => $response,
+        ]);
+    }
+
+    public function update(MyClientRequest $request, MyClient $myClient)
+    {
+        $slug = Str::slug($request->slug);
+        $array = [
+            ...$request->validated(),
+            'slug' => $slug,
+        ];
+
+        $myClient->update($array);
+        $myClient->refresh();
+
+        $redis = Redis::connection();
+        $redis->set($slug, json_encode($myClient->toArray()));
         $response = $redis->get($slug);
 
         $response = json_decode($response);

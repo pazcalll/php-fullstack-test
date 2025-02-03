@@ -24,6 +24,7 @@ class MyClientRequest extends FormRequest
         return [
             //
             "name" => ["required", "max:250"],
+            'slug' => ['required', 'max:100'],
             "is_project" => ["required", "string", "max:30"],
             "self_capture" => ["required", "string", "in:0,1"],
             "client_prefix" => ["required", "string", "max:4"],
